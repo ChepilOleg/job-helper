@@ -316,7 +316,6 @@ const checkingInputs = (close) => {
         x = true;
     } else {
         pushColorList(task.color);
-        alert(task.color);
     }
     if (!("ficsation" in task)) {
         alert("Вкажіть держак");
