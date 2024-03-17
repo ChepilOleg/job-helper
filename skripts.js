@@ -191,11 +191,11 @@ const makeForm = (nameForm, bottomButton = false) => {
         },
         controlerT: {
             info: ["controlerT", "radio", radioScript],
-            list: ["thagaT", "nemaT", "blutuzT"]
+            list: ["zhagaT", "nemaT", "blutuzT"]
         },
         controlerU: {
             info: ["controlerU", "radio", radioScript],
-            list: ["thagaU", "nemaU", "blutuzU"]
+            list: ["zhagaU", "nemaU", "blutuzU"]
         },
         ficsation: {
             info: ["ficsation", "radio"],
