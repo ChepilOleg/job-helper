@@ -222,7 +222,7 @@ const makeForm = (nameForm, bottomButton = false) => {
             list: ["Вкіжіть кількість"]
         },
         nambertask: {
-            info: ["nambertask", "number", , 230],
+            info: ["nambertask", "number", , 2400],
             list: ["Вкажіть номер замовлення"]
         },
         other: {
