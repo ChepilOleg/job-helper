@@ -14,7 +14,6 @@ const SaitActivation = () => {
     curentTask.forEach((element) => {
         showBodyUl(element);
     });
-    lampElements();
 };
 
 const paintControl = () => {
@@ -103,9 +102,10 @@ const createForm = ({
                 break;
             case "button":
                 label.classList.add("defolt-input");
-                label.innerHTML =
-                    createInput(type, name, item) +
-                    createOnclick(item, dopFunc, dopFuncArg);
+                label.innerHTML = createInput(type, name, item) + ">";
+                label.addEventListener("click", () =>
+                    dopFunc(item, dopFuncArg)
+                );
                 break;
         }
         section.append(label);
@@ -122,7 +122,7 @@ const createImgSrc = (type, item) => `<img src="sprites/${type}/${item}.png" `;
 const createPlaceholder = (text) => `placeholder="${text}" `;
 
 const createOnclick = (it, dF, dFA) =>
-    dF ? `onclick = "${dF}('${it}', '${dFA}')"> ` : `> `;
+    dF ? `onclick = "${dF}('${it}','${dFA}')"> ` : `> `;
 
 const createDatalist = (name) => {
     const datalist = document.createElement("datalist");
@@ -194,7 +194,7 @@ const makeForm = (nameForm, bottomButton = false) => {
             list: ["cabel", "FL"]
         },
         default: {
-            info: ["default", "button", "checkingInputs"],
+            info: ["default", "button", checkingInputs],
             list: ["Закрити", "Закр і Зап", "Записати"]
         }
     };
@@ -265,7 +265,6 @@ const readInputs = () => {
         }
     }
     task.ID = generateId();
-    console.log(task);
     return task;
     // checkingInputs(task, close);
 };
@@ -302,7 +301,6 @@ const checkingInputs = (nameButton) => {
     const curentTask = getLocalStorege("list-storege");
     curentTask.push(task);
     setLocalStorege(curentTask, "list-storege");
-    lampElements();
     if (nameButton == "Закр і Зап") closeModalWindow();
 };
 const showBodyUl = (task) => {
@@ -386,111 +384,35 @@ const showTask = (task, colorUl) => {
 };
 
 //Nid restail
-const lampElements = () => {
-    const curentTask = getLocalStorege("list-storege");
-    const elements = {};
-    curentTask.forEach((element) => {
-        const color = element.color;
-        let x, y;
-        switch (element.lampType) {
-            case "Evo":
-                if ("other" in element) {
-                    for (let x of element.other) {
-                        if (x === "frame") {
-                            elements[element.body + " " + color + " " + x] =
-                                (parseFloat(elements[x]) || 0) +
-                                parseFloat(element.amount);
-                        }
-                    }
-                }
-            case "Izy":
-                y = element.body + " " + color + " ";
-                if ("controlerT" in element) {
-                    x = y + element.controlerT + " body";
-                } else {
-                    x = y + " withoutControler body";
-                }
-                elements[x] =
-                    (parseFloat(elements[x]) || 0) + parseFloat(element.amount);
-
-                if ("controlerU" in element) {
-                    x = y + element.controlerU + " cover";
-                } else {
-                    x = y + " withoutControler cover";
-                }
-                elements[x] =
-                    (parseFloat(elements[x]) || 0) + parseFloat(element.amount);
-
-                x = element.ficsation + " " + color;
-                elements[x] =
-                    (parseFloat(elements[x]) || 0) + parseFloat(element.amount);
-                break;
-            case "Tso":
-                y = element.body + " " + color + " ";
-                if ("controlerU" in element) {
-                    x = y + element.controlerU + " body";
-                } else {
-                    x = y + " withoutControler body";
-                }
-                elements[x] =
-                    (parseFloat(elements[x]) || 0) + parseFloat(element.amount);
-
-                if ("controlerT" in element) {
-                    x = y + element.controlerT + " cover";
-                } else {
-                    x = y + " withoutControler cover";
-                }
-                elements[x] =
-                    (parseFloat(elements[x]) || 0) + parseFloat(element.amount);
-
-                x = element.ficsation + " " + color;
-                elements[x] =
-                    (parseFloat(elements[x]) || 0) + parseFloat(element.amount);
-                break;
-        }
-    });
-    showLampElements(elements);
-};
-const showLampElements = (elements) => {
-    const div = document.querySelector(".lamp-elements");
-    div.innerText = "";
-    for (let element in elements) {
-        const section = document.createElement("section");
-        const name = document.createElement("p");
-        const amount = document.createElement("p");
-        name.innerText = element;
-        amount.innerText = elements[element];
-        section.append(name, amount);
-        div.appendChild(section);
-    }
-};
 
 const svipeLeft = (task) => {
     showModalWindow();
     createForm({
-        info: ["svipeLeft", "button", "svipeLeftButtons", task],
+        info: ["svipeLeft", "button", svipeLeftButtons, task],
         list: ["Закрити", "Видалити", "Редагувати"]
     });
     // deleteTask(ID, body, color);
 };
 const svipeLeftButtons = (button, task) => {
-    const funck = (button, task) => {
-        switch (button.innerText) {
-            case "Видалити":
-                deleteTask(task);
-                closeModalWindow();
-                break;
-            case "Редагувати":
-                svipeRight(task, true);
-                createForm({
-                    info: ["svipeLeft", "button", "buttonEdit", task.ID],
-                    list: ["ЗБЕРЕГТИ", "Закрити"]
-                });
-                break;
-        }
-    };
-    button.addEventListener("click", () => funck(button, task));
+    switch (button) {
+        case "Закрити":
+            closeModalWindow();
+            break;
+        case "Видалити":
+            deleteTask(task);
+            closeModalWindow();
+            break;
+        case "Редагувати":
+            svipeRight(task, false);
+            createForm({
+                info: ["svipeLeft", "button", buttonEdit, task.ID],
+                list: ["Зберегти", "Закрити"]
+            });
+            break;
+    }
 };
+
+const somsof = (a, b) => {};
 
 const checkedEdit = (ev, { body, color }) => {
     const bodyT = ev.parentElement.parentElement.childNodes[0].innerHTML;
@@ -504,9 +426,8 @@ const checkedEdit = (ev, { body, color }) => {
     return false;
 };
 const buttonEdit = (but, ID) => {
-    const ev = document.getElementById(`${ID}`);
-    but.addEventListener("click", () => click(ev));
-    const click = (ev) => {
+    if (but === "Зберегти") {
+        const ev = document.getElementById(`${ID}`);
         const currentTask = getLocalStorege("list-storege");
         const task = readInputs();
         const checked = checkedEdit(ev, task);
@@ -522,8 +443,8 @@ const buttonEdit = (but, ID) => {
             currentTask[currentTask.findIndex((item) => item.ID === ID)] = task;
             setLocalStorege(currentTask, "list-storege");
         }
-        closeModalWindow();
-    };
+    }
+    closeModalWindow();
 };
 
 const deleteTask = ({ ID, body, color }) => {
