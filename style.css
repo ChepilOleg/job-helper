@@ -129,13 +129,14 @@ label>input:checked+img {
     margin: 5px;
 }
 
-.defolt-input>button {
+.defolt-input>input {
     border-radius: 10px;
     width: 100%;
     height: 40px;
+    word-break: keep-all;
 }
 
-.defolt-input>button:active {
+.defolt-input>input:active {
     background-color: red;
 }
 
